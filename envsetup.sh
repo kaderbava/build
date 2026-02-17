@@ -1211,6 +1211,12 @@ if [ -z "${CCACHE_EXEC}" ]; then
         $CCACHE_EXEC -o compression=true -o direct_mode="${DIRECT_MODE}" -M "${CCACHE_MAXSIZE}" \
             && echo "ccache enabled, CCACHE_EXEC set to: $CCACHE_EXEC, CCACHE_MAXSIZE set to: $CCACHE_MAXSIZE, direct_mode set to: $DIRECT_MODE" >&2 \
             || echo "Warning: Could not set cache size limit. Please check ccache configuration." >&2
+        CURRENT_CCACHE_SIZE=$(du -sh "$CCACHE_DIR" 2>/dev/null | cut -f1)
+        if [ -n "$CURRENT_CCACHE_SIZE" ]; then
+            echo "Current ccache size is: $CURRENT_CCACHE_SIZE" >&2
+        else
+            echo "No cached files in ccache." >&2
+        fi
     else
         echo "Error: ccache not found. Please install ccache." >&2
     fi
